@@ -1,0 +1,30 @@
+library(EBImage)
+
+f = system.file("images", "cotton_test.jpg", package="EBImage")
+x = readImage(f)
+
+
+x = resize(x,256)
+x = x[,,1]
+
+y = thresh(x, 2, 2, 0.05)
+display(y)
+
+
+fts = computeFeatures.shape(y)
+fts
+str(fts)
+b = data.frame(fts)
+
+a= rbind(a,fts)
+a$Plant = c("turmeric","turmeric",
+            "cotton","cotton","cotton")
+a$Plant = as.factor(a$Plant)
+
+library(randomForest)
+model = randomForest(Plant~., data = a )
+summary(model)
+pred = predict(model, newdata= b)
+pred
+
+
